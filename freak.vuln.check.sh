@@ -73,8 +73,8 @@ function testExportCiphers(){
 
     ciphers=$(openssl ciphers -V | grep "EXP-" | awk '{print $3}')
     for cph in $ciphers;do
-        echo -n "$domain;$ip;$port;$cph;" >> $OUTPUT
-        echo -n "$target: $cph "
+        echo -n "$domain;$target;$cph;" >> $OUTPUT
+        echo -n "$domain ($target): $cph "
         out=$(echo -e "quit\n" | openssl s_client -cipher $cph -connect $target 2>&1)
         fail=$(echo $out | grep -i "alert handshake failure" | wc -l)
         refused=$(echo $out | grep -i "Connection refused" | wc -l)
@@ -94,7 +94,7 @@ function testExportCiphers(){
 ################
 
 
-echo -n "DOMAIN;IP;PORT;CIPHER SUITE;IS SUPPORTED" > $OUTPUT
+echo -n "DOMAIN;HOST;CIPHER SUITE;IS SUPPORTED" > $OUTPUT
 
 tocheck=$1
 iplist=""
